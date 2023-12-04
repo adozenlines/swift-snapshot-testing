@@ -1,47 +1,54 @@
-import SwiftSyntaxMacros
-import SwiftSyntaxMacrosTestSupport
 import XCTest
-
-#if canImport(SnapshotTestingMacros)
+import SwiftUI
 import SnapshotMacros
 import SnapshotTesting
-import SnapshotTestingMacros
-let testMacros: [String: Macro.Type] = [
-    "AssertSnapshotEqual": AssertSnapshotEqualMacro.self,
-]
-#endif
 
-final class SnapshotTestingMacroTests: XCTestCase {
-    func testMacro() throws {
-        #if canImport(SnapshotTestingMacros)
-        let data = Data([0x54, 0x42, 0x44, 0x45])
-        if let value = String(data: data, encoding: .utf8) {
-            assertMacroExpansion(
-            """
-            #AssertSnapshotEqual(of: \(value), as: .lines)
-            """,
-            expandedSource: """
-            assertSnapshot(of: TBDE, as: .lines)
-            """,
-            macros: testMacros
-            )
-        }
-        else {
-            XCTFail("Failed to convert data")
-        }
-        #else
-        throw XCTSkip("macros are only supported when running tests for the host platform")
-        #endif
-    }
-    
+
+final class AssertSnapshotTestingMacroTests: XCTestCase {
     func testData() {
-        #if canImport(SnapshotTestingMacros)
         let data = Data([0x54, 0x42, 0x44, 0x45])
         if let value = String(data: data, encoding: .utf8) {
             #AssertSnapshotEqual(of: value, as: .lines)
         } else {
             XCTFail("Failed to convert data")
         }
+    }
+    
+    func testView() {
+        struct AView: View {
+            var body: some View {
+                Text("Hello SnapshotTesting")
+                    .font(.largeTitle)
+                    .frame(width: 250, height: 250)
+            }
+        }
+        
+        let view = AView()
+        #if os(macOS)
+        let controller = NSHostingController(rootView: view)
+        controller.view.frame = CGRect(x: 0, y: 0, width: 300, height: 300)
+        #AssertSnapshotEqual(of: controller, as: .image, named: named)
+        #elseif os(tvOS)
+        let controller = UIHostingController(rootView: view)
+        #AssertSnapshotEqual(of: controller, as: .image(on: .tv4K), named: named)
+        #else
+        let controller = UIHostingController(rootView: view)
+        #AssertSnapshotEqual(of: controller, as: .image(on: .iPhone13), named: named)
         #endif
+    }
+    
+    private var named: String {
+        #if os(macOS)
+        let name = "macOS"
+        #elseif os(iOS)
+        let name = "iOS"
+        #elseif os(visionOS)
+        let name = "visionOS"
+        #elseif os(tvOS)
+        let name = "tvOS"
+        #else
+        let name = "watchOS"
+        #endif
+        return name
     }
 }
