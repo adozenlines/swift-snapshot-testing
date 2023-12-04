@@ -24,9 +24,11 @@ final class AssertSnapshotMacroSyntaxValidationTest: XCTestCase {
             assertMacroExpansion(
             """
             #AssertSnapshotEqual(of: \(value), as: .lines)
+            #AssertSnapshotEqual(of: \(value), as: .lines, named: "validated", record: true, timeout: 2.0)
             """,
             expandedSource: """
             assertSnapshot(of: TBDE, as: .lines)
+            assertSnapshot(of: TBDE, as: .lines, named: "validated", record: true, timeout: 2.0)
             """,
             macros: testMacros
             )

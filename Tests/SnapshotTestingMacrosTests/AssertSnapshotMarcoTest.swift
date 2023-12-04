@@ -27,13 +27,13 @@ final class AssertSnapshotTestingMacroTests: XCTestCase {
         #if os(macOS)
         let controller = NSHostingController(rootView: view)
         controller.view.frame = CGRect(x: 0, y: 0, width: 300, height: 300)
-        #AssertSnapshotEqual(of: controller, as: .image, named: named)
+        #AssertSnapshotEqual(of: controller, as: .image, named: named, record: false, timeout: 3.0)
         #elseif os(tvOS)
         let controller = UIHostingController(rootView: view)
-        #AssertSnapshotEqual(of: controller, as: .image(on: .tv4K), named: named)
+        #AssertSnapshotEqual(of: controller, as: .image(on: .tv4K), named: named, record: false, timeout: 3.0)
         #else
         let controller = UIHostingController(rootView: view)
-        #AssertSnapshotEqual(of: controller, as: .image(on: .iPhone13), named: named)
+        #AssertSnapshotEqual(of: controller, as: .image(on: .iPhone13), named: named, record: false, timeout: 3.0)
         #endif
     }
     
