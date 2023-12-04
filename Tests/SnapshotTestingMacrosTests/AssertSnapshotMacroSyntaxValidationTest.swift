@@ -1,6 +1,6 @@
 //
-//  AssertSnapshotMacroSyntaxValidationText.swift
-//  
+//  AssertSnapshotMacroSyntaxValidationTest.swift
+//
 //
 //  Created by Sean Batson on 2023-12-03.
 //
@@ -15,7 +15,7 @@ let testMacros: [String: Macro.Type] = [
 ]
 #endif
 
-final class AssertSnapshotMacroSyntaxValidationText: XCTestCase {
+final class AssertSnapshotMacroSyntaxValidationTest: XCTestCase {
 
     func testMacro() throws {
         #if canImport(SnapshotTestingMacros)
