@@ -19,14 +19,22 @@ final class AssertSnapshotTestingMacroTests: XCTestCase {
             var body: some View {
                 Text("Hello SnapshotTesting")
                     .font(.largeTitle)
-                    .frame(width: 250, height: 250)
+                #if os(macOS)
+                    .frame(width: 1024, height: 640)
+                #elseif os(iOS)
+                    .frame(width: 390, height: 844)
+                #elseif os(tvOS)
+                    .frame(width: 3840, height:2160)
+                #else
+                    .frame(width: 120, height: 80)
+                #endif
             }
         }
         
         let view = AView()
         #if os(macOS)
         let controller = NSHostingController(rootView: view)
-        controller.view.frame = CGRect(x: 0, y: 0, width: 300, height: 300)
+        controller.view.frame = CGRect(x: 0, y: 0, width: 1024, height: 640)
         #AssertSnapshotEqual(of: controller, as: .image, named: named, record: false, timeout: 3.0)
         #elseif os(tvOS)
         let controller = UIHostingController(rootView: view)
