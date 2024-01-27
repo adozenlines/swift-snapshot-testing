@@ -1,4 +1,4 @@
-// swift-tools-version: 5.9
+// swift-tools-version: 5.10
 
 import PackageDescription
 import CompilerPluginSupport
@@ -6,7 +6,7 @@ import CompilerPluginSupport
 let package = Package(
   name: "swift-snapshot-testing",
   platforms: [
-    .macOS(.v10_15), .iOS(.v13), .tvOS(.v13), .watchOS(.v6), .macCatalyst(.v13)
+    .macOS(.v10_15), .iOS(.v13), .tvOS(.v13), .watchOS(.v6), .macCatalyst(.v13), .visionOS(.v1)
   ],
   products: [
     .library(
@@ -23,7 +23,7 @@ let package = Package(
     ),
   ],
   dependencies: [
-    .package(url: "https://github.com/apple/swift-syntax.git", "508.0.1"..<"510.0.0")
+    .package(url: "https://github.com/apple/swift-syntax.git", "508.0.1"..<"599.9.9")
   ],
   targets: [
     .macro(
